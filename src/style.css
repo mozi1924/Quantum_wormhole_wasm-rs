@@ -71,44 +71,155 @@ body {
   gap: 1.75rem;
 }
 
-/* Material You Header */
+/* Material You & Cyber Corporate Header */
 .app-header {
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
-.brand-badge {
+.header-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .header-top-bar {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+}
+
+/* Arasaka Corporate Brand Badge */
+.arasaka-brand-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 1rem;
+  gap: 0.65rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 9999px;
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  font-size: 0.8rem;
-  font-weight: 600;
+  background: rgba(26, 27, 32, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--arasaka-border-red);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.arasaka-brand-badge:hover {
+  border-color: var(--arasaka-red);
+  background: rgba(35, 20, 26, 0.85);
+  box-shadow: 0 0 18px var(--arasaka-red-glow);
+  transform: translateY(-1px);
+}
+
+.arasaka-logo-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arasaka-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 4px var(--arasaka-red-glow));
+}
+
+.arasaka-svg .svg-stroke {
+  stroke: var(--arasaka-red);
+  stroke-width: 115px;
+  fill: none;
+  transition: stroke 0.25s ease;
+}
+
+.arasaka-svg .svg-fill {
+  fill: #ffffff;
+  transition: fill 0.25s ease;
+}
+
+.arasaka-brand-badge:hover .arasaka-svg .svg-fill {
+  fill: #ffffff;
+}
+
+.brand-text-group {
+  font-family: var(--md-sys-font-family-mono);
+  font-size: 0.78rem;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.brand-badge .material-symbols-outlined {
-  font-size: 1.1rem;
+.brand-company {
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 1px;
 }
 
-.app-title {
-  font-size: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--md-sys-color-on-surface);
+.brand-divider {
+  color: var(--arasaka-red);
+  font-weight: 800;
 }
 
-.app-subtitle {
-  font-size: 0.95rem;
+.brand-dept {
   color: var(--md-sys-color-on-surface-variant);
-  max-width: 540px;
-  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* Sub-domain Deployment Badge */
+.subdomain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: 9999px;
+  background: var(--arasaka-dark-red);
+  border: 1px solid var(--arasaka-border-red);
+  font-family: var(--md-sys-font-family-mono);
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pulse-beacon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--arasaka-red);
+  box-shadow: 0 0 8px var(--arasaka-red);
+  animation: pulseRed 2s infinite ease-in-out;
+}
+
+@keyframes pulseRed {
+  0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 4px var(--arasaka-red); }
+  50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 12px var(--arasaka-red); }
+  100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 4px var(--arasaka-red); }
+}
+
+.subdomain-url {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.clearance-tag {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  background: var(--arasaka-red);
+  color: #ffffff;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-left: 0.15rem;
 }
 
 /* Main Card */

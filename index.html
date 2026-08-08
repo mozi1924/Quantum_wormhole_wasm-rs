@@ -23,11 +23,33 @@
   <main class="app-container">
     <!-- Header -->
     <header class="app-header">
-      <div class="brand-badge">
-        <span class="material-symbols-outlined">auto_awesome</span>
-        <span>RUST WASM ENGINE</span>
+      <div class="header-top-bar">
+        <a href="https://www.arasaka.ltd" target="_blank" rel="noopener noreferrer" class="arasaka-brand-badge" title="Arasaka Corporation Official">
+          <div class="arasaka-logo-icon">
+            <svg class="arasaka-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1451.3 1451.3">
+              <polygon class="svg-stroke" points="1257.5 1032.7 725.7 1339.7 193.9 1032.7 193.9 418.6 725.7 111.6 1257.5 418.6 1257.5 1032.7"></polygon>
+              <rect class="svg-fill" x="673.2" y="707.8" width="104.9" height="617.1"></rect>
+              <circle class="svg-fill" cx="725.7" cy="725.7" r="92.4"></circle>
+              <circle class="svg-fill" cx="498.81" cy="897.3" r="92.4"></circle>
+              <circle class="svg-fill" cx="953.04" cy="897.3" r="92.4"></circle>
+              <rect class="svg-fill" x="562.77" y="836.52" width="104.9" height="264.68" transform="translate(-531.45 1017.22) rotate(-60)"></rect>
+              <rect class="svg-fill" x="705" y="916.41" width="264.68" height="104.9" transform="translate(-372.25 548.47) rotate(-30)"></rect>
+            </svg>
+          </div>
+          <div class="brand-text-group">
+            <span class="brand-company">ARASAKA CORP</span>
+            <span class="brand-divider">/</span>
+            <span class="brand-dept">QUANTUM WASM LABS</span>
+          </div>
+        </a>
+
+        <div class="subdomain-badge" title="Target Domain: quantum.arasaka.ltd">
+          <span class="pulse-beacon"></span>
+          <span class="subdomain-url">quantum.arasaka.ltd</span>
+          <span class="clearance-tag">SEC-4</span>
+        </div>
       </div>
-      <h1 class="app-title">QUANTUM WORMHOLE</h1>
+
     </header>
 
     <!-- Main Card Area -->
@@ -80,7 +102,7 @@
             <md-outlined-text-field
               id="input-name"
               label="姓名 (Name)"
-              value="Mozi Quantum"
+              value="Shijie He"
               placeholder="请输入您的姓名"
               supporting-text="用于生成量子特征哈希">
               <span slot="leading-icon" class="material-symbols-outlined">fingerprint</span>
@@ -92,7 +114,7 @@
             <md-outlined-text-field
               id="input-dob"
               label="出生日期 (Date of Birth)"
-              value="2000-01-01"
+              value="1999-04-01"
               readonly
               supporting-text="点击选择时间维度的时空坐标">
               <span slot="leading-icon" class="material-symbols-outlined">event</span>

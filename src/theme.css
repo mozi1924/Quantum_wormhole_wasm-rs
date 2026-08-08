@@ -1,5 +1,11 @@
-/* Material Design 3 (Material You / Pixel Expressive Dark Palette) Tokens */
+  /* Material Design 3 (Material You / Pixel Expressive Dark Palette) Tokens */
 :root {
+  /* Arasaka Cyber-Corporate Accent Tokens */
+  --arasaka-red: #ff003c;
+  --arasaka-red-glow: rgba(255, 0, 60, 0.4);
+  --arasaka-dark-red: rgba(255, 0, 60, 0.12);
+  --arasaka-border-red: rgba(255, 0, 60, 0.3);
+
   /* Dynamic Color Palette */
   --md-sys-color-surface: #121318;
   --md-sys-color-surface-container-lowest: #0e0e13;
