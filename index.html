@@ -18,39 +18,56 @@
   <div class="app-background">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
-    <div class="stars-particle-grid"></div>
   </div>
 
   <main class="app-container">
     <!-- Header -->
     <header class="app-header">
       <div class="brand-badge">
-        <span class="material-symbols-outlined icon-spin">blur_on</span>
+        <span class="material-symbols-outlined">auto_awesome</span>
         <span>RUST WASM ENGINE</span>
       </div>
       <h1 class="app-title">QUANTUM WORMHOLE</h1>
-      <p class="app-subtitle">基于个人印记与量子引力透镜的 4D 虫洞生成器</p>
     </header>
 
     <!-- Main Card Area -->
     <section class="main-card">
-      <!-- 512x512 Canvas Container in Center -->
+      <!-- 512x512 Canvas Container -->
       <div class="canvas-wrapper">
-        <div class="canvas-glow-ring"></div>
-        <div class="canvas-frame">
+        <div class="canvas-frame" id="canvas-frame">
           <canvas id="wormhole-canvas" width="512" height="512"></canvas>
+          
+          <!-- Standby Cover Overlay (No inside button, clean & minimal) -->
+          <div id="standby-overlay" class="canvas-standby-overlay">
+            <div class="standby-icon-box">
+              <span class="material-symbols-outlined">blur_on</span>
+            </div>
+            <div class="standby-title">量子计算引擎待机中</div>
+            <div class="standby-desc">请配置个人特征参数，点击下方启动引擎即可运行 WASM 计算</div>
+          </div>
+
+          <!-- Loading Overlay -->
           <div id="canvas-loader" class="canvas-loader hidden">
             <md-circular-progress indeterminate></md-circular-progress>
-            <span class="loader-text">计算引力透镜点阵...</span>
+            <span class="loader-text">编译 Rust WASM 物理核心...</span>
           </div>
-          <!-- Overlay HUD stats -->
+
+          <!-- HUD Overlay Stats -->
           <div class="canvas-hud top-left">
             <span class="hud-label">FPS</span>
-            <span id="hud-fps" class="hud-val">60</span>
+            <span id="hud-fps" class="hud-val">0</span>
           </div>
+
           <div class="canvas-hud top-right">
-            <span class="hud-label">SEED HASH</span>
+            <span class="hud-label">SEED</span>
             <span id="hud-hash" class="hud-val">0x00000000</span>
+          </div>
+
+          <div class="canvas-hud bottom-left">
+            <div class="status-badge">
+              <span id="status-dot" class="status-dot"></span>
+              <span id="hud-status" class="hud-val">待机</span>
+            </div>
           </div>
         </div>
       </div>
@@ -70,34 +87,34 @@
             </md-outlined-text-field>
           </div>
 
-          <!-- Birth Date Input -->
+          <!-- Birth Date Input with Material Design Date Picker Trigger -->
           <div class="field-wrapper">
             <md-outlined-text-field
               id="input-dob"
-              type="date"
               label="出生日期 (Date of Birth)"
               value="2000-01-01"
-              supporting-text="注入时间维度的时空坐标">
+              readonly
+              supporting-text="点击选择时间维度的时空坐标">
               <span slot="leading-icon" class="material-symbols-outlined">event</span>
+              <md-icon-button slot="trailing-icon" id="btn-open-datepicker">
+                <span class="material-symbols-outlined">calendar_month</span>
+              </md-icon-button>
             </md-outlined-text-field>
           </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Streamlined Action Buttons Row: Only Start/Stop and Export -->
         <div class="actions-row">
-          <md-filled-button id="btn-generate" class="primary-btn">
-            <span slot="icon" class="material-symbols-outlined">auto_mode</span>
-            启动量子坍缩 (Generate)
+          <!-- Main Toggle Button (Start/Stop) -->
+          <md-filled-button id="btn-toggle-engine" class="primary-btn">
+            <span slot="icon" class="material-symbols-outlined" id="engine-btn-icon">play_arrow</span>
+            <span id="engine-btn-text">启动量子引擎</span>
           </md-filled-button>
 
+          <!-- Export PNG Button -->
           <md-outlined-button id="btn-save" class="secondary-btn">
             <span slot="icon" class="material-symbols-outlined">download</span>
-            导出高清图 (Export)
-          </md-outlined-button>
-
-          <md-outlined-button id="btn-toggle-anim" class="secondary-btn">
-            <span slot="icon" class="material-symbols-outlined" id="anim-icon">pause</span>
-            <span id="anim-text">暂停动态 (Pause)</span>
+            导出高清图
           </md-outlined-button>
         </div>
       </div>
@@ -163,6 +180,37 @@
       </div>
     </section>
   </main>
+
+  <!-- Material Design 3 Date Picker Modal Dialog -->
+  <dialog id="m3-date-dialog" class="m3-dialog">
+    <div class="m3-date-picker">
+      <div class="m3-date-picker-header">
+        <span class="m3-date-picker-sub">选择出生日期</span>
+        <span id="m3-date-picker-selected" class="m3-date-picker-selected">2000年1月1日</span>
+      </div>
+      
+      <div class="m3-date-picker-body">
+        <div class="m3-picker-controls">
+          <span id="m3-month-year-title" class="m3-month-year">2000年 1月</span>
+          <div class="m3-nav-btns">
+            <md-icon-button id="btn-prev-month"><span class="material-symbols-outlined">chevron_left</span></md-icon-button>
+            <md-icon-button id="btn-next-month"><span class="material-symbols-outlined">chevron_right</span></md-icon-button>
+          </div>
+        </div>
+
+        <div class="m3-calendar-grid-header">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+
+        <div id="m3-days-container" class="m3-days-container"></div>
+      </div>
+
+      <div class="m3-dialog-actions">
+        <md-outlined-button id="btn-date-cancel">取消</md-outlined-button>
+        <md-filled-button id="btn-date-confirm">确定</md-filled-button>
+      </div>
+    </div>
+  </dialog>
 
   <script type="module" src="./src/main.ts"></script>
 </body>

@@ -1,53 +1,64 @@
-/* Material Design 3 Dark Theme Design Tokens */
+/* Material Design 3 (Material You / Pixel Expressive Dark Palette) Tokens */
 :root {
-  --md-sys-color-primary: #00e5ff;
-  --md-sys-color-on-primary: #003642;
-  --md-sys-color-primary-container: #004d5e;
-  --md-sys-color-on-primary-container: #b8f2ff;
+  /* Dynamic Color Palette */
+  --md-sys-color-surface: #121318;
+  --md-sys-color-surface-container-lowest: #0e0e13;
+  --md-sys-color-surface-container-low: #1a1b20;
+  --md-sys-color-surface-container: #1e1f25;
+  --md-sys-color-surface-container-high: #2b2930;
+  --md-sys-color-surface-container-highest: #36343b;
+
+  --md-sys-color-primary: #a8c7fa;
+  --md-sys-color-on-primary: #00325a;
+  --md-sys-color-primary-container: #00497d;
+  --md-sys-color-on-primary-container: #d1e4ff;
 
   --md-sys-color-secondary: #d0bcff;
   --md-sys-color-on-secondary: #381e72;
   --md-sys-color-secondary-container: #4f378b;
   --md-sys-color-on-secondary-container: #e8def8;
 
-  --md-sys-color-tertiary: #ffb4ab;
-  --md-sys-color-on-tertiary: #690005;
+  --md-sys-color-tertiary: #7fcfff;
+  --md-sys-color-on-tertiary: #003353;
+  --md-sys-color-tertiary-container: #004b73;
+  --md-sys-color-on-tertiary-container: #cce5ff;
 
-  --md-sys-color-surface: #0a0d14;
-  --md-sys-color-on-surface: #e2e8f0;
-  --md-sys-color-surface-variant: #1a202c;
-  --md-sys-color-on-surface-variant: #94a3b8;
-  --md-sys-color-surface-container: rgba(22, 27, 38, 0.85);
-  --md-sys-color-surface-container-high: rgba(30, 37, 52, 0.9);
+  --md-sys-color-on-surface: #e2e2e9;
+  --md-sys-color-on-surface-variant: #c4c6d0;
+  --md-sys-color-outline: #8e9199;
+  --md-sys-color-outline-variant: #44474f;
 
-  --md-sys-color-outline: rgba(255, 255, 255, 0.18);
-  --md-sys-color-outline-variant: rgba(255, 255, 255, 0.08);
+  --md-sys-color-scrim: rgba(0, 0, 0, 0.6);
 
-  --md-sys-color-scrim: rgba(0, 0, 0, 0.8);
-
-  --md-sys-font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Fonts */
+  --md-sys-font-family: 'Outfit', 'Google Sans', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   --md-sys-font-family-mono: 'Roboto Mono', monospace;
 
-  /* Material Design 3 Web Component overrides */
+  /* Material Web Component Tokens Overrides */
   --md-filled-button-container-color: var(--md-sys-color-primary);
   --md-filled-button-label-text-color: var(--md-sys-color-on-primary);
   --md-filled-button-icon-color: var(--md-sys-color-on-primary);
-  --md-filled-button-container-shape: 14px;
+  --md-filled-button-container-shape: 9999px;
 
-  --md-outlined-button-outline-color: var(--md-sys-color-outline);
+  --md-filled-tonal-button-container-color: var(--md-sys-color-secondary-container);
+  --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-secondary-container);
+  --md-filled-tonal-button-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-filled-tonal-button-container-shape: 9999px;
+
+  --md-outlined-button-outline-color: var(--md-sys-color-outline-variant);
   --md-outlined-button-label-text-color: var(--md-sys-color-primary);
   --md-outlined-button-icon-color: var(--md-sys-color-primary);
-  --md-outlined-button-container-shape: 14px;
+  --md-outlined-button-container-shape: 9999px;
 
-  --md-outlined-text-field-outline-color: var(--md-sys-color-outline);
+  --md-outlined-text-field-outline-color: var(--md-sys-color-outline-variant);
   --md-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
-  --md-outlined-text-field-input-text-color: #f8fafc;
+  --md-outlined-text-field-input-text-color: var(--md-sys-color-on-surface);
   --md-outlined-text-field-label-text-color: var(--md-sys-color-on-surface-variant);
   --md-outlined-text-field-focus-label-text-color: var(--md-sys-color-primary);
-  --md-outlined-text-field-container-shape: 12px;
+  --md-outlined-text-field-container-shape: 16px;
 
   --md-slider-active-track-color: var(--md-sys-color-primary);
-  --md-slider-inactive-track-color: rgba(255, 255, 255, 0.12);
+  --md-slider-inactive-track-color: var(--md-sys-color-surface-container-highest);
   --md-slider-handle-color: var(--md-sys-color-primary);
 
   --md-circular-progress-active-indicator-color: var(--md-sys-color-primary);
