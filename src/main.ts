@@ -467,25 +467,38 @@ async function initApp() {
 
     renderSingleFrame();
 
-    // 画布点击：彩蛋 → 音效/跳转；停止态 → 启动引擎；运行态 → 音效
+    // 统一的用户启动引擎行为（播放音效，检查并触发彩蛋，启动引擎）
+    function handleUserStartEngine() {
+      const seed = getSeed(inputName.value || 'Mozi Quantum', inputDob.value || '2000-01-01');
+      audio.playRandom(seed);
+
+      if (activeEgg) {
+        showToast(`${t('egg.toast')}：${t(`egg.${activeEgg.id}`)}`);
+        window.open(activeEgg.redirectURL, '_blank', 'noopener');
+      }
+
+      startEngine();
+    }
+
+    // 画布点击
     canvasFrame.addEventListener('click', () => {
       const seed = getSeed(inputName.value || 'Mozi Quantum', inputDob.value || '2000-01-01');
 
-      if (activeEgg) {
-        audio.playRandom(seed);
-        showToast(`${t('egg.toast')}：${t(`egg.${activeEgg.id}`)}`);
-        window.open(activeEgg.redirectURL, '_blank', 'noopener');
-      } else if (engineState === 'STOPPED') {
-        audio.playRandom(seed);
-        startEngine();
+      if (engineState === 'STOPPED') {
+        handleUserStartEngine();
       } else {
         audio.playRandom(seed);
+        // 如果运行态点击画布也需要触发彩蛋重定向，保留此逻辑
+        if (activeEgg) {
+          showToast(`${t('egg.toast')}：${t(`egg.${activeEgg.id}`)}`);
+          window.open(activeEgg.redirectURL, '_blank', 'noopener');
+        }
       }
     });
 
     btnToggleEngine.addEventListener('click', () => {
       if (engineState === 'STOPPED') {
-        startEngine();
+        handleUserStartEngine();
       } else {
         stopEngine();
       }
