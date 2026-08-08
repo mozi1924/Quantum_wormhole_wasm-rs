@@ -1,0 +1,32 @@
+# --- Rust & WebAssembly ---
+# Rust 编译产物目录
+/crate/target/
+# wasm-pack 默认生成的 npm 产物目录（如果每次运行都重新构建，建议忽略）
+/crate/pkg/
+# cargo-generate 或编译过程产生的临时文件
+*.rs.bk
+cargo-lock.toml
+
+# --- Node.js & Vite ---
+# 依赖包目录
+node_modules/
+# Vite 默认的生产环境构建输出目录
+dist/
+dist-ssr/
+# Vite 的临时本地缓存
+.vite/
+# 某些本地开发工具的缓存（如 rsw 插件）
+.rsw/
+
+# --- 环境变量与本地配置 ---
+.env
+.env.local
+.env.*.local
+
+# --- 日志与系统文件 ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
