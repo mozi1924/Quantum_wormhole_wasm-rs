@@ -50,6 +50,26 @@
         </div>
       </div>
 
+      <!-- Utility Controls: Language Selector & Sound Toggle -->
+      <div class="header-utils">
+        <div class="header-utils-inner">
+          <md-outlined-select
+            id="lang-select"
+            class="lang-select"
+            data-i18n="app.langLabel"
+            label="语言 / Language">
+            <md-select-option value="zh-CN" headline="简体中文"></md-select-option>
+            <md-select-option value="en" headline="English"></md-select-option>
+            <md-select-option value="ja" headline="日本語"></md-select-option>
+            <md-select-option value="zh-HK" headline="繁體中文（香港）"></md-select-option>
+            <md-select-option value="zh-TW" headline="繁體中文（台灣）"></md-select-option>
+          </md-outlined-select>
+
+          <md-icon-button id="btn-sound" data-i18n-title="app.soundOff" title="关闭音效">
+            <span class="material-symbols-outlined" id="sound-icon">volume_up</span>
+          </md-icon-button>
+        </div>
+      </div>
     </header>
 
     <!-- Main Card Area -->
@@ -58,20 +78,26 @@
       <div class="canvas-wrapper">
         <div class="canvas-frame" id="canvas-frame">
           <canvas id="wormhole-canvas" width="512" height="512"></canvas>
-          
+
           <!-- Standby Cover Overlay (No inside button, clean & minimal) -->
           <div id="standby-overlay" class="canvas-standby-overlay">
             <div class="standby-icon-box">
               <span class="material-symbols-outlined">blur_on</span>
             </div>
-            <div class="standby-title">量子计算引擎待机中</div>
-            <div class="standby-desc">请配置个人特征参数，点击下方启动引擎即可运行 WASM 计算</div>
+            <div class="standby-title" data-i18n="standby.title">量子计算引擎待机中</div>
+            <div class="standby-desc" data-i18n="standby.desc">请配置个人特征参数，点击下方启动引擎即可运行 WASM 计算</div>
           </div>
 
           <!-- Loading Overlay -->
           <div id="canvas-loader" class="canvas-loader hidden">
             <md-circular-progress indeterminate></md-circular-progress>
-            <span class="loader-text">编译 Rust WASM 物理核心...</span>
+            <span class="loader-text" data-i18n="loader.text">编译 Rust WASM 物理核心...</span>
+          </div>
+
+          <!-- Easter Egg Badge (shown when a name easter egg is active) -->
+          <div id="egg-badge" class="egg-badge hidden" title="点击画布解锁隐藏链接">
+            <span class="egg-badge-icon">🥚</span>
+            <span id="egg-badge-text">彩蛋已解锁</span>
           </div>
 
           <!-- HUD Overlay Stats -->
@@ -101,6 +127,9 @@
           <div class="field-wrapper">
             <md-outlined-text-field
               id="input-name"
+              data-i18n="name.label"
+              data-i18n-placeholder="name.placeholder"
+              data-i18n-supporting="name.supporting"
               label="姓名 (Name)"
               value="Shijie He"
               placeholder="请输入您的姓名"
@@ -113,6 +142,8 @@
           <div class="field-wrapper">
             <md-outlined-text-field
               id="input-dob"
+              data-i18n="dob.label"
+              data-i18n-supporting="dob.supporting"
               label="出生日期 (Date of Birth)"
               value="1999-04-01"
               readonly
@@ -130,13 +161,13 @@
           <!-- Main Toggle Button (Start/Stop) -->
           <md-filled-button id="btn-toggle-engine" class="primary-btn">
             <span slot="icon" class="material-symbols-outlined" id="engine-btn-icon">play_arrow</span>
-            <span id="engine-btn-text">启动量子引擎</span>
+            <span id="engine-btn-text" data-i18n="engine.start">启动量子引擎</span>
           </md-filled-button>
 
           <!-- Export PNG Button -->
           <md-outlined-button id="btn-save" class="secondary-btn">
             <span slot="icon" class="material-symbols-outlined">download</span>
-            导出高清图
+            <span data-i18n="engine.save">导出高清图</span>
           </md-outlined-button>
         </div>
       </div>
@@ -145,12 +176,12 @@
       <details class="tuning-panel" open>
         <summary class="tuning-header">
           <span class="material-symbols-outlined">tune</span>
-          <span>量子场调控参数 (Quantum Field Controls)</span>
+          <span data-i18n="tuning.title">量子场调控参数 (Quantum Field Controls)</span>
         </summary>
         <div class="sliders-grid">
           <div class="slider-group">
             <div class="slider-info">
-              <span>引力弯曲度 (Spacetime Warp)</span>
+              <span data-i18n="tuning.warp">引力弯曲度 (Spacetime Warp)</span>
               <span id="val-warp" class="slider-num">1.0</span>
             </div>
             <md-slider id="slider-warp" min="0.2" max="2.5" step="0.1" value="1.0"></md-slider>
@@ -158,7 +189,7 @@
 
           <div class="slider-group">
             <div class="slider-info">
-              <span>量子涨落 (Quantum Flux)</span>
+              <span data-i18n="tuning.flux">量子涨落 (Quantum Flux)</span>
               <span id="val-flux" class="slider-num">1.0</span>
             </div>
             <md-slider id="slider-flux" min="0.1" max="3.0" step="0.1" value="1.0"></md-slider>
@@ -166,7 +197,7 @@
 
           <div class="slider-group">
             <div class="slider-info">
-              <span>吸积盘旋转速率 (Spin Speed)</span>
+              <span data-i18n="tuning.speed">吸积盘旋转速率 (Spin Speed)</span>
               <span id="val-speed" class="slider-num">1.0</span>
             </div>
             <md-slider id="slider-speed" min="0.0" max="3.0" step="0.1" value="1.0"></md-slider>
@@ -180,7 +211,7 @@
       <div class="telemetry-card">
         <div class="tele-icon"><span class="material-symbols-outlined">cyclone</span></div>
         <div class="tele-body">
-          <div class="tele-title">Event Horizon Radius</div>
+          <div class="tele-title" data-i18n="tele.horizon">Event Horizon Radius</div>
           <div id="tele-horizon" class="tele-value">--</div>
         </div>
       </div>
@@ -188,7 +219,7 @@
       <div class="telemetry-card">
         <div class="tele-icon"><span class="material-symbols-outlined">bolt</span></div>
         <div class="tele-body">
-          <div class="tele-title">Singularity Energy</div>
+          <div class="tele-title" data-i18n="tele.energy">Singularity Energy</div>
           <div id="tele-energy" class="tele-value">--</div>
         </div>
       </div>
@@ -196,11 +227,24 @@
       <div class="telemetry-card">
         <div class="tele-icon"><span class="material-symbols-outlined">graphic_eq</span></div>
         <div class="tele-body">
-          <div class="tele-title">Doppler Redshift</div>
+          <div class="tele-title" data-i18n="tele.doppler">Doppler Redshift</div>
           <div id="tele-doppler" class="tele-value">--</div>
         </div>
       </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-line">
+        <span class="footer-version">
+          <span data-i18n="footer.version">版本</span>
+          <span id="app-version">v1.2.0</span>
+        </span>
+        <span class="footer-divider">·</span>
+        <span class="footer-made-by" data-i18n="footer.madeBy">Made with ❤️ by AdhesionTek · WASM 重制版</span>
+      </div>
+      <div class="footer-egg-hint" data-i18n="footer.eggHint">试试输入 "海子"、"嘉然"、"何同学" ...</div>
+    </footer>
   </main>
 
   <!-- Material Design 3 Date Picker Modal Dialog -->
@@ -209,14 +253,14 @@
       <!-- Header -->
       <div class="m3-date-picker-header">
         <div class="m3-header-text">
-          <span class="m3-date-picker-sub">选择出生日期</span>
+          <span class="m3-date-picker-sub" data-i18n="datepicker.sub">选择出生日期</span>
           <span id="m3-date-picker-selected" class="m3-date-picker-selected">2000年1月1日 周六</span>
         </div>
-        <md-icon-button id="btn-date-mode-toggle" title="切换模式">
+        <md-icon-button id="btn-date-mode-toggle" data-i18n-title="datepicker.modeTitle" title="切换模式">
           <span class="material-symbols-outlined" id="mode-toggle-icon">edit</span>
         </md-icon-button>
       </div>
-      
+
       <!-- Body Container -->
       <div class="m3-date-picker-body">
         <!-- View 1: Calendar View -->
@@ -227,14 +271,12 @@
               <span class="material-symbols-outlined m3-dropdown-arrow" id="month-year-arrow">arrow_drop_down</span>
             </button>
             <div class="m3-nav-btns">
-              <md-icon-button id="btn-prev-month" title="上一月"><span class="material-symbols-outlined">chevron_left</span></md-icon-button>
-              <md-icon-button id="btn-next-month" title="下一月"><span class="material-symbols-outlined">chevron_right</span></md-icon-button>
+              <md-icon-button id="btn-prev-month" data-i18n-title="datepicker.prevMonth" title="上一月"><span class="material-symbols-outlined">chevron_left</span></md-icon-button>
+              <md-icon-button id="btn-next-month" data-i18n-title="datepicker.nextMonth" title="下一月"><span class="material-symbols-outlined">chevron_right</span></md-icon-button>
             </div>
           </div>
 
-          <div class="m3-calendar-grid-header">
-            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
-          </div>
+          <div id="m3-weekday-header" class="m3-calendar-grid-header"></div>
 
           <div id="m3-days-container" class="m3-days-container"></div>
         </div>
@@ -249,6 +291,9 @@
           <div class="m3-text-input-container">
             <md-outlined-text-field
               id="m3-text-field-date"
+              data-i18n="datepicker.inputLabel"
+              data-i18n-placeholder="datepicker.inputPlaceholder"
+              data-i18n-supporting="datepicker.inputSupporting"
               label="日期 (YYYY-MM-DD)"
               value="2000-01-01"
               placeholder="例如 2000-01-01"
@@ -261,8 +306,8 @@
 
       <!-- Actions Footer -->
       <div class="m3-dialog-actions">
-        <md-outlined-button id="btn-date-cancel">取消</md-outlined-button>
-        <md-filled-button id="btn-date-confirm">确定</md-filled-button>
+        <md-outlined-button id="btn-date-cancel"><span data-i18n="datepicker.cancel">取消</span></md-outlined-button>
+        <md-filled-button id="btn-date-confirm"><span data-i18n="datepicker.confirm">确定</span></md-filled-button>
       </div>
     </div>
   </dialog>
