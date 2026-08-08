@@ -49,8 +49,19 @@ const teleDoppler = document.getElementById('tele-doppler') as HTMLElement;
 // M3 Date Picker Elements
 const m3DateDialog = document.getElementById('m3-date-dialog') as HTMLDialogElement;
 const m3DatePickerSelected = document.getElementById('m3-date-picker-selected') as HTMLElement;
+const btnDateModeToggle = document.getElementById('btn-date-mode-toggle') as HTMLElement;
+const modeToggleIcon = document.getElementById('mode-toggle-icon') as HTMLElement;
+
+const m3CalendarView = document.getElementById('m3-calendar-view') as HTMLElement;
+const m3YearView = document.getElementById('m3-year-view') as HTMLElement;
+const m3InputView = document.getElementById('m3-input-view') as HTMLElement;
+
+const m3MonthYearBtn = document.getElementById('m3-month-year-btn') as HTMLElement;
 const m3MonthYearTitle = document.getElementById('m3-month-year-title') as HTMLElement;
 const m3DaysContainer = document.getElementById('m3-days-container') as HTMLElement;
+const m3YearsContainer = document.getElementById('m3-years-container') as HTMLElement;
+const m3TextFieldDate = document.getElementById('m3-text-field-date') as any;
+
 const btnPrevMonth = document.getElementById('btn-prev-month') as HTMLElement;
 const btnNextMonth = document.getElementById('btn-next-month') as HTMLElement;
 const btnDateCancel = document.getElementById('btn-date-cancel') as HTMLElement;
@@ -58,6 +69,7 @@ const btnDateConfirm = document.getElementById('btn-date-confirm') as HTMLElemen
 
 // App Engine State
 type EngineState = 'STOPPED' | 'RUNNING';
+type DatePickerViewMode = 'CALENDAR' | 'YEAR_SELECT' | 'TEXT_INPUT';
 
 let engine: QuantumWormholeEngine | null = null;
 let engineState: EngineState = 'STOPPED';
@@ -73,6 +85,7 @@ let currentSelectedDate = new Date(2000, 0, 1);
 let activePickerYear = 2000;
 let activePickerMonth = 0;
 let tempSelectedDate = new Date(2000, 0, 1);
+let datePickerMode: DatePickerViewMode = 'CALENDAR';
 
 // Compute SHA-256 Hash for input seed display
 async function computeHash(str: string): Promise<string> {
@@ -111,7 +124,6 @@ function renderSingleFrame() {
   const warp = parseFloat(sliderWarp.value ?? '1.0');
   const flux = parseFloat(sliderFlux.value ?? '1.0');
 
-  // Compute 512x512 RGBA array from Rust WASM
   const pixelArray = engine.render(name, dob, timeOffset, warp, flux);
   
   const imgData = new ImageData(
@@ -131,7 +143,6 @@ function renderLoop(now: number) {
   const delta = (now - lastFrameTime) / 1000;
   lastFrameTime = now;
 
-  // FPS metric calculation
   frameCount++;
   if (now - fpsTimer >= 500) {
     const currentFps = Math.round((frameCount * 1000) / (now - fpsTimer));
@@ -155,11 +166,9 @@ function startEngine() {
   engineState = 'RUNNING';
   standbyOverlay.classList.add('hidden');
 
-  // Update Buttons UI
   engineBtnIcon.textContent = 'stop';
   engineBtnText.textContent = '停止引擎';
 
-  // Update Status HUD
   hudStatus.textContent = '运行中';
   statusDot.className = 'status-dot active';
 
@@ -181,11 +190,9 @@ function stopEngine() {
 
   standbyOverlay.classList.remove('hidden');
 
-  // Update Buttons UI
   engineBtnIcon.textContent = 'play_arrow';
   engineBtnText.textContent = '启动量子引擎';
 
-  // Update Status HUD
   hudStatus.textContent = '待机';
   statusDot.className = 'status-dot';
   hudFps.textContent = '0';
@@ -199,20 +206,61 @@ function formatDate(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
-// Format date for M3 Picker display
-function formatM3DateDisplay(d: Date): string {
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+// Format date for M3 Picker Headline display (e.g., 2000年1月1日 周六)
+function formatM3HeadlineDate(d: Date): string {
+  const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  const dayOfWeek = dayNames[d.getDay()];
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${dayOfWeek}`;
+}
+
+// Update Top Headline Text
+function updatePickerHeadline() {
+  m3DatePickerSelected.textContent = formatM3HeadlineDate(tempSelectedDate);
+}
+
+// Switch between Date Picker View Modes
+function switchPickerView(mode: DatePickerViewMode) {
+  datePickerMode = mode;
+
+  m3CalendarView.classList.add('hidden');
+  m3YearView.classList.add('hidden');
+  m3InputView.classList.add('hidden');
+
+  m3MonthYearBtn.classList.remove('active');
+
+  if (mode === 'CALENDAR') {
+    m3CalendarView.classList.remove('hidden');
+    modeToggleIcon.textContent = 'edit';
+    btnDateModeToggle.title = '切换文本输入模式';
+    renderM3Calendar();
+  } else if (mode === 'YEAR_SELECT') {
+    m3YearView.classList.remove('hidden');
+    m3MonthYearBtn.classList.add('active');
+    modeToggleIcon.textContent = 'edit';
+    renderM3YearView();
+  } else if (mode === 'TEXT_INPUT') {
+    m3InputView.classList.remove('hidden');
+    modeToggleIcon.textContent = 'calendar_month';
+    btnDateModeToggle.title = '切换日历选择模式';
+    m3TextFieldDate.value = formatDate(tempSelectedDate);
+  }
+
+  updatePickerHeadline();
 }
 
 // Render Calendar Days Grid for M3 DatePicker
 function renderM3Calendar() {
   m3MonthYearTitle.textContent = `${activePickerYear}年 ${activePickerMonth + 1}月`;
-  m3DatePickerSelected.textContent = formatM3DateDisplay(tempSelectedDate);
+  updatePickerHeadline();
 
   m3DaysContainer.innerHTML = '';
 
   const firstDayOfWeek = new Date(activePickerYear, activePickerMonth, 1).getDay();
   const totalDays = new Date(activePickerYear, activePickerMonth + 1, 0).getDate();
+
+  const today = new Date();
+  const isTodayMonth = today.getFullYear() === activePickerYear && today.getMonth() === activePickerMonth;
+  const todayDate = today.getDate();
 
   // Empty cells before first day
   for (let i = 0; i < firstDayOfWeek; i++) {
@@ -227,6 +275,12 @@ function renderM3Calendar() {
     cell.className = 'm3-day-cell';
     cell.textContent = day.toString();
 
+    // Check if cell is today
+    if (isTodayMonth && day === todayDate) {
+      cell.classList.add('today');
+    }
+
+    // Check if cell is selected
     const cellDate = new Date(activePickerYear, activePickerMonth, day);
     if (
       cellDate.getFullYear() === tempSelectedDate.getFullYear() &&
@@ -245,10 +299,43 @@ function renderM3Calendar() {
   }
 }
 
+// Render Year Selection Grid
+function renderM3YearView() {
+  m3YearsContainer.innerHTML = '';
+  const currentYear = activePickerYear;
+
+  let selectedEl: HTMLElement | null = null;
+
+  for (let year = 1920; year <= 2035; year++) {
+    const yearCell = document.createElement('div');
+    yearCell.className = 'm3-year-cell';
+    yearCell.textContent = `${year}年`;
+
+    if (year === currentYear) {
+      yearCell.classList.add('selected');
+      selectedEl = yearCell;
+    }
+
+    yearCell.addEventListener('click', () => {
+      activePickerYear = year;
+      tempSelectedDate.setFullYear(year);
+      switchPickerView('CALENDAR');
+    });
+
+    m3YearsContainer.appendChild(yearCell);
+  }
+
+  if (selectedEl) {
+    setTimeout(() => {
+      selectedEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 50);
+  }
+}
+
 // Open M3 Date Picker Dialog
 function openDatePicker() {
   const parts = (inputDob.value || '2000-01-01').split('-').map(Number);
-  if (parts.length === 3) {
+  if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
     currentSelectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
   } else {
     currentSelectedDate = new Date(2000, 0, 1);
@@ -258,7 +345,7 @@ function openDatePicker() {
   activePickerYear = tempSelectedDate.getFullYear();
   activePickerMonth = tempSelectedDate.getMonth();
 
-  renderM3Calendar();
+  switchPickerView('CALENDAR');
   m3DateDialog.showModal();
 }
 
@@ -266,28 +353,23 @@ function openDatePicker() {
 async function initApp() {
   try {
     loader.classList.remove('hidden');
-    // Load WASM package
     await init();
     engine = new QuantumWormholeEngine(512, 512);
 
     loader.classList.add('hidden');
 
-    // Initial calculation of telemetry
     const initialName = inputName.value || 'Mozi Quantum';
     const initialDob = inputDob.value || '2000-01-01';
     updateTelemetry(initialName, initialDob);
 
-    // Initial preview render frame on canvas background
     renderSingleFrame();
 
-    // Event Listener: Click on Canvas Frame or Overlay to toggle engine
     canvasFrame.addEventListener('click', () => {
       if (engineState === 'STOPPED') {
         startEngine();
       }
     });
 
-    // Event Listener: Main Engine Toggle (Start / Stop)
     btnToggleEngine.addEventListener('click', () => {
       if (engineState === 'STOPPED') {
         startEngine();
@@ -296,7 +378,6 @@ async function initApp() {
       }
     });
 
-    // Event Listener: Export High Res Image
     btnSave.addEventListener('click', () => {
       const link = document.createElement('a');
       const name = (inputName.value || 'quantum').replace(/\s+/g, '_');
@@ -305,11 +386,29 @@ async function initApp() {
       link.click();
     });
 
-    // M3 Date Picker Event Listeners
+    // M3 Date Picker Event Handlers
     inputDob.addEventListener('click', openDatePicker);
     btnOpenDatepicker.addEventListener('click', (e: Event) => {
       e.stopPropagation();
       openDatePicker();
+    });
+
+    // Header Pencil / Mode Toggle
+    btnDateModeToggle.addEventListener('click', () => {
+      if (datePickerMode === 'TEXT_INPUT') {
+        switchPickerView('CALENDAR');
+      } else {
+        switchPickerView('TEXT_INPUT');
+      }
+    });
+
+    // Month-Year Dropdown Button
+    m3MonthYearBtn.addEventListener('click', () => {
+      if (datePickerMode === 'YEAR_SELECT') {
+        switchPickerView('CALENDAR');
+      } else {
+        switchPickerView('YEAR_SELECT');
+      }
     });
 
     btnPrevMonth.addEventListener('click', () => {
@@ -330,18 +429,43 @@ async function initApp() {
       renderM3Calendar();
     });
 
+    // Live Text Input Handling in TEXT_INPUT Mode
+    m3TextFieldDate.addEventListener('input', () => {
+      const val = (m3TextFieldDate.value || '').trim();
+      const parts = val.split('-').map(Number);
+      if (parts.length === 3 && parts[0] >= 1900 && parts[0] <= 2100 && parts[1] >= 1 && parts[1] <= 12 && parts[2] >= 1 && parts[2] <= 31) {
+        const parsed = new Date(parts[0], parts[1] - 1, parts[2]);
+        if (!isNaN(parsed.getTime())) {
+          tempSelectedDate = parsed;
+          activePickerYear = parsed.getFullYear();
+          activePickerMonth = parsed.getMonth();
+          updatePickerHeadline();
+        }
+      }
+    });
+
     btnDateCancel.addEventListener('click', () => {
       m3DateDialog.close();
     });
 
     btnDateConfirm.addEventListener('click', () => {
+      if (datePickerMode === 'TEXT_INPUT') {
+        const val = (m3TextFieldDate.value || '').trim();
+        const parts = val.split('-').map(Number);
+        if (parts.length === 3 && parts[0] >= 1900 && parts[0] <= 2100 && parts[1] >= 1 && parts[1] <= 12 && parts[2] >= 1 && parts[2] <= 31) {
+          const parsed = new Date(parts[0], parts[1] - 1, parts[2]);
+          if (!isNaN(parsed.getTime())) {
+            tempSelectedDate = parsed;
+          }
+        }
+      }
+
       currentSelectedDate = new Date(tempSelectedDate);
       inputDob.value = formatDate(currentSelectedDate);
       m3DateDialog.close();
       onInputParamChange();
     });
 
-    // Input listeners (Trigger on-demand single render if stopped)
     function onInputParamChange() {
       updateTelemetry(inputName.value || 'Mozi Quantum', inputDob.value || '2000-01-01');
       if (engineState !== 'RUNNING') {
@@ -351,7 +475,6 @@ async function initApp() {
 
     inputName.addEventListener('input', onInputParamChange);
 
-    // Sliders listeners
     sliderWarp.addEventListener('input', () => {
       valWarp.textContent = parseFloat(sliderWarp.value).toFixed(1);
       if (engineState !== 'RUNNING') renderSingleFrame();
@@ -366,7 +489,6 @@ async function initApp() {
       valSpeed.textContent = parseFloat(sliderSpeed.value).toFixed(1);
     });
 
-    // Visibility Change Handler to auto-pause WASM when tab is hidden
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
         if (engineState === 'RUNNING') {
@@ -387,5 +509,4 @@ async function initApp() {
   }
 }
 
-// Run Application Init
 initApp();

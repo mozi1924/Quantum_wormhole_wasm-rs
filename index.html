@@ -184,27 +184,60 @@
   <!-- Material Design 3 Date Picker Modal Dialog -->
   <dialog id="m3-date-dialog" class="m3-dialog">
     <div class="m3-date-picker">
+      <!-- Header -->
       <div class="m3-date-picker-header">
-        <span class="m3-date-picker-sub">选择出生日期</span>
-        <span id="m3-date-picker-selected" class="m3-date-picker-selected">2000年1月1日</span>
+        <div class="m3-header-text">
+          <span class="m3-date-picker-sub">选择出生日期</span>
+          <span id="m3-date-picker-selected" class="m3-date-picker-selected">2000年1月1日 周六</span>
+        </div>
+        <md-icon-button id="btn-date-mode-toggle" title="切换模式">
+          <span class="material-symbols-outlined" id="mode-toggle-icon">edit</span>
+        </md-icon-button>
       </div>
       
+      <!-- Body Container -->
       <div class="m3-date-picker-body">
-        <div class="m3-picker-controls">
-          <span id="m3-month-year-title" class="m3-month-year">2000年 1月</span>
-          <div class="m3-nav-btns">
-            <md-icon-button id="btn-prev-month"><span class="material-symbols-outlined">chevron_left</span></md-icon-button>
-            <md-icon-button id="btn-next-month"><span class="material-symbols-outlined">chevron_right</span></md-icon-button>
+        <!-- View 1: Calendar View -->
+        <div id="m3-calendar-view" class="m3-picker-view">
+          <div class="m3-picker-controls">
+            <button type="button" id="m3-month-year-btn" class="m3-month-year-btn">
+              <span id="m3-month-year-title">2000年 1月</span>
+              <span class="material-symbols-outlined m3-dropdown-arrow" id="month-year-arrow">arrow_drop_down</span>
+            </button>
+            <div class="m3-nav-btns">
+              <md-icon-button id="btn-prev-month" title="上一月"><span class="material-symbols-outlined">chevron_left</span></md-icon-button>
+              <md-icon-button id="btn-next-month" title="下一月"><span class="material-symbols-outlined">chevron_right</span></md-icon-button>
+            </div>
+          </div>
+
+          <div class="m3-calendar-grid-header">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+
+          <div id="m3-days-container" class="m3-days-container"></div>
+        </div>
+
+        <!-- View 2: Year Selector View -->
+        <div id="m3-year-view" class="m3-picker-view hidden">
+          <div id="m3-years-container" class="m3-years-container"></div>
+        </div>
+
+        <!-- View 3: Direct Text Input View -->
+        <div id="m3-input-view" class="m3-picker-view hidden">
+          <div class="m3-text-input-container">
+            <md-outlined-text-field
+              id="m3-text-field-date"
+              label="日期 (YYYY-MM-DD)"
+              value="2000-01-01"
+              placeholder="例如 2000-01-01"
+              supporting-text="请输入正确格式 (年-月-日)">
+              <span slot="leading-icon" class="material-symbols-outlined">calendar_today</span>
+            </md-outlined-text-field>
           </div>
         </div>
-
-        <div class="m3-calendar-grid-header">
-          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
-        </div>
-
-        <div id="m3-days-container" class="m3-days-container"></div>
       </div>
 
+      <!-- Actions Footer -->
       <div class="m3-dialog-actions">
         <md-outlined-button id="btn-date-cancel">取消</md-outlined-button>
         <md-filled-button id="btn-date-confirm">确定</md-filled-button>
