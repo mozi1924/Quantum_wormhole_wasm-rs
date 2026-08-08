@@ -22,33 +22,14 @@ function randomInt(seed: number, max: number, min = 0): number {
 export class AudioManager {
   private cache = new Map<string, HTMLAudioElement>();
   private pickCount = 0;
-  private _enabled = true;
 
   constructor(private readonly baseUrl = 'audio/') {}
-
-  /** 音效是否开启。 */
-  get enabled(): boolean {
-    return this._enabled;
-  }
-
-  setEnabled(enabled: boolean): void {
-    this._enabled = enabled;
-    if (!enabled) {
-      // 静音时停掉所有正在播放的音频
-      this.cache.forEach((audio) => {
-        audio.pause();
-        audio.currentTime = 0;
-      });
-    }
-  }
 
   /**
    * 播放一个由 seed 决定的声音。
    * @param seed 外部种子（如姓名+生日哈希）；内部叠加点击次数让每次点击有变化
    */
   playRandom(seed: number): void {
-    if (!this._enabled) return;
-
     const idx = randomInt(seed + this.pickCount * 997, AUDIO_COUNT);
     this.pickCount++;
 
@@ -57,8 +38,6 @@ export class AudioManager {
 
   /** 播放指定音效，缓存 Audio 元素并支持重播（rewind）。 */
   play(src: string): void {
-    if (!this._enabled) return;
-
     let audio = this.cache.get(src);
     if (!audio) {
       audio = new Audio(src);

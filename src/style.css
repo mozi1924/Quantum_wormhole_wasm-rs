@@ -803,37 +803,6 @@ md-slider {
   font-weight: 600;
 }
 
-/* ================================================================== */
-/* Utility Controls: Language Selector & Sound Toggle                 */
-/* ================================================================== */
-
-.header-utils {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.header-utils-inner {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.35rem 0.5rem 0.35rem 0.75rem;
-  border-radius: 9999px;
-  background: rgba(26, 27, 32, 0.55);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.lang-select {
-  width: 170px;
-  --md-outlined-select-text-field-container-height: 42px;
-  --md-outlined-select-text-field-container-shape: 9999px;
-}
-
-.lang-select .material-symbols-outlined {
-  font-size: 1.2rem;
-}
 
 /* ================================================================== */
 /* Easter Egg Badge (canvas overlay)                                  */

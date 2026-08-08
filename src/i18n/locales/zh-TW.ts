@@ -61,6 +61,6 @@ export const zhTW: Messages = {
   'egg.danmu': '彈幕付き · 彈幕附',
 
   'footer.version': '版本',
-  'footer.madeBy': 'Made with ❤️ by AdhesionTek · WASM 重製版',
+  'footer.madeBy': 'Made with ❤️ by AdhesionTek & Mozi· WASM 重製版',
   'footer.eggHint': '試試輸入「海子」、「嘉然」、「何同學」...',
 };

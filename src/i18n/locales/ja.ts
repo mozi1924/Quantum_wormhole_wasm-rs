@@ -62,6 +62,6 @@ export const ja: Messages = {
   'egg.danmu': '弾幕付き',
 
   'footer.version': 'バージョン',
-  'footer.madeBy': 'Made with ❤️ by AdhesionTek · WASM リメイク',
+  'footer.madeBy': 'Made with ❤️ by AdhesionTek & Mozi· WASM リメイク',
   'footer.eggHint': '"海子"、"嘉然"、"何同学" などを試してみてください...',
 };

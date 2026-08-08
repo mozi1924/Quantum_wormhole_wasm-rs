@@ -62,6 +62,6 @@ export const en: Messages = {
   'egg.danmu': 'With danmaku',
 
   'footer.version': 'Version',
-  'footer.madeBy': 'Made with ❤️ by AdhesionTek · WASM remake',
+  'footer.madeBy': 'Made with ❤️ by AdhesionTek & Mozi · WASM remake',
   'footer.eggHint': 'Try typing "haizi", "jiaran", "hetongxue" ...',
 };

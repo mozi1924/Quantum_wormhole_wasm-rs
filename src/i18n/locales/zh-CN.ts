@@ -62,7 +62,7 @@ export const zhCN = {
   'egg.danmu': '弹幕付き · 弹幕附',
 
   'footer.version': '版本',
-  'footer.madeBy': 'Made with ❤️ by AdhesionTek · WASM 重制版',
+  'footer.madeBy': 'Made with ❤️ by AdhesionTek & Mozi· WASM 重制版',
   'footer.eggHint': '试试输入 "海子"、"嘉然"、"何同学" ...',
 } as const;
 

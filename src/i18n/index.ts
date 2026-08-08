@@ -52,9 +52,7 @@ function detectLocale(): AppLocale {
   return 'en';
 }
 
-let currentLocale: AppLocale = isAppLocale(localStorage.getItem(LOCALE_STORAGE_KEY))
-  ? (localStorage.getItem(LOCALE_STORAGE_KEY) as AppLocale)
-  : detectLocale();
+let currentLocale: AppLocale = detectLocale();
 
 /** 返回当前语言环境。 */
 export function getLocale(): AppLocale {
